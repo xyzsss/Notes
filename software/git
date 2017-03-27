@@ -1,0 +1,6 @@
+
+
+# add new branch for remote
+
+git checkout -b _branch_name_
+git push origin _branch_name_

@@ -1,0 +1,359 @@
+
+
+
+
+
+# Result is failed
+
+```
+{
+"server":"45.32.xx.xx",
+"server_port":443,
+"local_address": "127.0.0.1",
+"local_port":1080,
+"password":"xxxx",
+"timeout":600,
+"method":"rc4-md5"
+}
+ssserver -c /etc/shadowsocks.json -d start
+ssserver -c /etc/shadowsocks.json -d stop
+
+ssserver -c /etc/shadowsocks.json.rc4 -d start
+ssserver -c /etc/shadowsocks.json.rc4 -d stop 
+
+
+
+##
+ps -ef |grep net_speeder|grep -v grep| awk "{print $2}" |xargs|kill -9 && nohup /root/net-speeder-master/net_speeder  eth0 "ip"  > /dev/null 2>&1 & 
+nohup /root/net-speeder-master/net_speeder  eth0 "ip"  > /dev/null 2>&1 &
+
+## speed test
+加密方式改为CR4-MD5，相对aes-256-cfb来说可能加密方式更弱，但加密速度是后者的好几倍
+
+
+#### 加速sss
+# 1 。。。
+vi /etc/security/limits.conf
+ulimit -n 51200
+* soft nofile 51200
+* hard nofile 51200
+# 2 。。。
+sysctl net.ipv4.tcp_available_congestion_control
+
+# 3.。。
+vi /etc/sysctl.conf
+fs.file-max = 51200
+#提高整个系统的文件限制
+
+net.core.rmem_max = 67108864
+net.core.wmem_max = 67108864
+net.core.netdev_max_backlog = 250000
+net.core.somaxconn = 3240000
+ 
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 0
+net.ipv4.tcp_fin_timeout = 30
+net.ipv4.tcp_keepalive_time = 1200
+net.ipv4.ip_local_port_range = 10000 65000
+net.ipv4.tcp_max_syn_backlog = 8192
+net.ipv4.tcp_max_tw_buckets = 5000
+#如果linux内核没到3.10，这个fastopen请注释掉
+#net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_rmem = 4096 87380 67108864
+net.ipv4.tcp_wmem = 4096 65536 67108864
+net.ipv4.tcp_mtu_probing = 1
+net.ipv4.tcp_congestion_control = hybla
+```
+
+
+
+
+
+### #PLATFORM:CENTOS 7
+
+L2TP，Layer Two Tunneling Protocol，第二层隧道协议，一种虚拟隧道协议，通常用于虚拟专用网。
+
+L2TP协议自身不提供加密与可靠性验证的功能，可以和安全协议搭配使用，从而实现数据的加密传输。经常与L2TP协议搭配的加密协议是IPsec，当这两个协议搭配使用时，通常合称L2TP/IPsec
+
+在IP网络中，L2TP协议使用注册端口UDP 1701。
+
+
+
+#### PPTP vs L2TP/IPSEC vs IKEV2
+
+PPTP 是应用最广泛的 VPN 协议，在各类设备和操作系统上均有完善支持，设置也最简单。PPTP 允许加密和不加密，但云梯的 PPTP 强制128位加密，所以对绝大部分普通用户来说，足够安全。
+L2TP/IPSec 是基于 L2TP 协议，并使用 IPSec 进行加密的 VPN 技术。除了少数设备，L2TP/IPSec 也在绝大部分设备和操作系统上有完善支持。IPSec 的加密强度比 PPTP 更高。
+IKEv2 是最新的 VPN 协议，在最新的设备和操作系统上已经成为首选。IKEv2 在切换网络时，连接不会断开，加密强度和安全特性也是最高级别的，目前没有任何技术可以破解 IKEv2 中传输的数据。
+
+
+
+支持tun和ppp的OpenVZ VPS测试过，没有一个成功的，因为内核不支持，但是KVM和XEN架构的大多都可以用。脚本安装完成后需要重启IPSec服务和开启iptables并设置转发规则。
+
+Vultr 用的是 KVM架构。
+
+L2TP（Layer 2 Tunneling Protocol）
+IPSec（Internet Protocol Security）
+IKEv2 (Internet Key Exchange v2)
+能实现 IPsec 的目前总体上有 openswan，libreswan，strongswan 这3种。
+libreswan 是基于 openswan 的 fork，所以现在各个发行版基本已经看不到 openswan 的身影了。
+当然也有使用 strongswan 的。
+
+ipsec, 负责点对点的数据传输加密。工作在 IP 层 l2tp, 用于实现除了数据加密外其他 VPN 功能。
+
+xl2tpd 负责实现具体的 VPN 交互
+
+
+
+```
+ServerIP:45.32.38.xxx
+username:vpn
+password:xxx
+PSK:xxx
+```
+
+
+
+
+
+### Range
+
+基于 OpenVZ 虚拟化技术的 VPS 需要开启TUN/TAP才能正常使用.
+
+OpenVZ 虚拟的 VPS 需要系统内核支持 IPSec 才行.
+
+##### 如何检测是否支持TUN模块？
+
+执行命令：
+cat /dev/net/tun
+如果返回信息为：cat: /dev/net/tun: File descriptor in bad state 说明正常
+
+##### 如何检测是否支持ppp模块？
+
+执行命令：
+cat /dev/ppp
+如果返回信息为：cat: /dev/ppp: No such device or address 说明正常
+当然，脚本在安装时也会执行检查，如果不适用于安装，脚本会予以提示。
+
+
+
+openswan->ipsec
+
+```
+service ipsec restart 
+ipsec setup restart
+ipsec whack --status
+```
+
+
+
+### yum install 
+
+strongswan xl2tpd
+
+##### ipsec config file 1:**/etc/sysctl.conf **
+
+```
+net.ipv4.conf.all.rp_filter = 0
+net.ipv4.conf.default.rp_filter = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+#sysctl -p to make it work
+```
+
+##### ipsec config file 2:**/etc/strongswan/ipsec.conf **
+
+```
+config setup
+ 
+conn %default
+        ikelifetime=60m
+        keylife=20m
+        rekeymargin=3m
+        keyingtries=1
+ 
+conn l2tp
+        keyexchange=ikev1 # IKE版本
+        left=45.32.38.*    #!!!public ip
+        leftsubnet=0.0.0.0/0
+        leftprotoport=17/1701
+        authby=secret
+        leftfirewall=no
+        right=%any
+        rightprotoport=17/%any
+        type=transport
+        auto=add
+```
+
+##### ipsec config  file 3:**/etc/strongswan/ipsec.secrets**
+
+```
+# ipsec.secrets - strongSwan IPsec secrets file
+45.32.38.* %any: PSK "psk-content"        #public_ip or domain name
+```
+
+
+
+### Services 
+
+```
+ipsec setup start
+ipsec setup stop
+ipsec  verify
+-------
+
+service xl2tpd restart
+chkconfig xl2tpd on
+```
+
+
+
+
+
+##### l2tp config file 1: **/etc/xl2tpd/xl2tpd.conf **
+
+```
+[lns default]
+ip range = 10.10.0.2-10.10.0.100
+local ip = 10.10.0.1
+require chap = yes
+refuse pap = yes
+require authentication = yes
+name = LinuxVPNserver
+ppp debug = yes
+pppoptfile = /etc/ppp/options.xl2tpd
+length bit = yes
+bps = 1000000
+
+# ppp部分设定了 Chap 验证
+```
+
+##### l2tp config file 2:**/etc/ppp/options.xl2tpd**
+
+```
+ms-dns  8.8.8.8
+ms-dns  8.8.4.4
+noccp
+auth
+crtscts
+idle 600
+mtu 1200
+mru 1200
+nodefaultroute
+debug
+lock
+proxyarp
+connect-delay 2500
+```
+
+
+
+##### ipsec config file 3 :**/etc/ppp/chap-secrets**  (密码文件)
+
+```
+# Secrets for authentication using CHAP
+# client        server  secret                  IP addresses
+<user>          *       <password>              *
+```
+
+
+
+#### iptables part   -> ignored
+
+### #
+
+test port 
+
+````
+nc -vuz 45.32.38.xxx 1701
+````
+
+
+
+
+
+#### Start serice
+
+```
+systemctl start strongswan.service
+systemctl start xl2tpd.service
+
+ipsec verify
+```
+
+#### Restart Service
+
+```
+systemctl restart strongswan.service
+systemctl restart xl2tpd.service
+systemctl restart ipsec
+/bin/systemctl restart  strongswan.service
+```
+
+
+
+### Issue log  
+
+tail -f /var/log/secure
+
+​    IPsec SA established  或者 IPSec connection established  关键字出现表示ipsec部分没问题了
+
+xl2tpd -D
+
+
+
+？？？路由器端口映射
+
+？？？Route table
+
+``tcpdump -i any -nn icmp or esp or udp port 500 or udp port 4500``
+
+
+
+
+
+```
+Two or more interfaces found, checking IP forwarding            [FAILED]
+------
+echo 0 > /proc/sys/net/ipv4/ip_forward
+ipsec verify
+```
+
+
+
+```
+Checking for IPsec support in kernel [FAILED] 
+------
+1)修改/etc/ipsec.conf文件，加进去一句话，version 2.0
+2)执行ipsec setup start 我是用第二种方法解决的
+```
+
+```
+Hardware RNG detected, testing if used properly                 [FAILED]
+Opportunistic Encryption Support                                [DISABLED]
+------
+yum install rng-tools
+vim /etc/sysconfig/rngd
+EXTRAOPTIONS="-r /dev/urandom"
+chkconfig rngd on
+service rngd restart
+ipsec setup restart
+xl2tpd -D
+ipsec verify
+```
+
+
+
+```
+Checking that pluto is running                                  [FAILED]
+  whack: Pluto is not running (no "/var/run/pluto/pluto.ctl")
+ 
+------
+/etc/init.d/ipsec start
+service ipsec start 
+service ipsec status
+```
+
+
