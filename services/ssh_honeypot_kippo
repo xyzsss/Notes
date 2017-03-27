@@ -1,0 +1,27 @@
+
+
+
+cat /etc/ssh/sshd_config|grep  Port
+    Port 2345
+service sshd restart
+
+
+iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 22 -j REDIRECT --to-port 2345
+
+
+useradd -m kippo
+
+wget  http://kippo.googlecode.com/files/kippo-0.5.tar.gz
+tar xvf kippo-0.5.tar.gz
+mv kippo-* /home/kippo/ -Rf
+chown kippo.kippo /home/kippo/ -Rf
+
+su - kippo
+mv kippo-*  kippo
+cp kippo.cfg.dist kippo.cfg
+./start.sh
+cd /home/kippo/data
+echo "root:#$%^&*FGHJ"  > userdb.txt
+cd /home/kippo/log
+tail kippo.log
+

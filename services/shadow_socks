@@ -1,0 +1,35 @@
+
+
+
+yum install python-setuptools && easy_install pip
+pip install shadowsocks
+
+
+
+cat /etc/shadowsocks.json
+{
+"server":"PUBLIC_IP_ADDRESS",
+"server_port":8889,
+"local_address": "127.0.0.1",
+"local_port":1080,
+"password":"PASSWORD_VALUE",
+"timeout":600,
+"method":"aes-256-cfb"
+}
+
+cat etc/shadowsocks.json.rc4
+{
+"server":"PUBLIC_IP_ADDRESS",
+"server_port":8890,
+"local_address": "127.0.0.1",
+"local_port":1081,
+"password":"PASSWORD_VALUE",
+"timeout":600,
+"method":"rc4-md5"
+}
+
+
+ssserver -c /etc/shadowsocks.json -d start
+ssserver -c /etc/shadowsocks.json.rc4 -d start
+ssserver -c /etc/shadowsocks.json -d stop
+ssserver -c /etc/shadowsocks.json.rc4 -d stop
