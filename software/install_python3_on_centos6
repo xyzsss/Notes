@@ -1,0 +1,14 @@
+# env: bash
+
+yum -y update
+yum groupinstall "Development tools" -y
+yum  install -y zlib-dev openssl-devel sqlite-devel bzip2-devel
+
+# Pyhton3
+wget http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tar.bz2 -O /var/tmp/Python-3.3.2.tar.bz2
+bzip2 -cd /var/tmp/Python-3.3.2.tar.bz2 | tar xvf -
+Python-3.3.2
+./configure
+make
+make install
+/usr/local/bin/python3 --version 
