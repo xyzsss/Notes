@@ -1,0 +1,18 @@
+# env: bash
+
+
+yum install python-ipaddr -y
+
+wget https://github.com/denyhosts/denyhosts/archive/master.zip
+unzip master.zip
+cd denyhosts-master
+cp denyhosts.conf /etc
+cd /usr/bin
+cp daemon-control-dist daemon-control
+ln -s /usr/bin/daemon-control /etc/init.d/denyhosts
+ln -s /usr/bin/daemon-control /usr/sbin/denyhosts
+chkconfig --add denyhosts
+chkconfig --level 2345 denyhosts on
+systemctl restart denyhosts.service
+# python /root/denyhosts-master/denyhosts.py  --config /etc/denyhosts.conf --daemon
+
