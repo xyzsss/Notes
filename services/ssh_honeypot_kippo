@@ -46,3 +46,4 @@ cd data
 echo "root:#$%^&*FGHJ"  > userdb.txt
 ./start.sh
 
+exit
