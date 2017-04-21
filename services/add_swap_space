@@ -1,0 +1,14 @@
+
+# 2G
+dd if=/dev/zero of=/var/swapfile bs=1024 count=2048000
+
+# check 
+du -ah /var|grep “swapfile”
+
+# make swap
+mkswap /var/swapfile
+# swap on
+swapon /var/swapfile
+
+# add to startup
+echo “/var/swapfile swap swap defaults 0 0” >> /etc/fstab
