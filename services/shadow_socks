@@ -1,5 +1,5 @@
 
-
+# for centos6/7
 
 yum install python-setuptools && easy_install pip
 pip install shadowsocks
@@ -33,3 +33,5 @@ ssserver -c /etc/shadowsocks.json -d start
 ssserver -c /etc/shadowsocks.json.rc4 -d start
 ssserver -c /etc/shadowsocks.json -d stop
 ssserver -c /etc/shadowsocks.json.rc4 -d stop
+echo "alias sstarts=\"ssserver -c /etc/shadowsocks.json -d start\"" >> .bashrc
+echo "alias sstops=\"ssserver -c /etc/shadowsocks.json -d stop\"" >> .bashrc
