@@ -8,7 +8,7 @@ virt-what
 
 # install sss
 yum -y update
-yum install python-setuptools virt-what -y
+yum install python-setuptools -y
 easy_install pip
 pip install shadowsocks
 
