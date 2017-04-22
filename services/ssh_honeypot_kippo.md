@@ -1,18 +1,10 @@
 # env: bash
 # 2017-04-21 23:54:46
 
-cat /etc/ssh/sshd_config|grep  Port
-sed -ie 's/#Port 22/Port 22022/' /etc/ssh/sshd_config
-cat /etc/ssh/sshd_config|grep  Port
+# [Need the part first] (https://raw.githubusercontent.com/xyzsss/Notes/realmaster/services/SSH_withkey_login)
+# ssh port reset
+# redirect defaut port 22 to 2345 by iptables
 
-cat /etc/ssh/sshd_config|grep  PermitRootLogin
-sed -ie 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-cat /etc/ssh/sshd_config|grep  PermitRootLogin
-systemctl restart sshd.service
-
-iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 22 -j REDIRECT --to-port 2345
-service iptables save
-systemctl restart iptables.service
 
 
 # twisted install
