@@ -1,11 +1,13 @@
 #!/usr/bin/ksh
 # add swap space ,default 2g to centos6/7
 
-# 2G
+# new 2G file
 dd if=/dev/zero of=/var/swapfile bs=1024 count=2048000
+
 
 # check 
 du -ah /var|grep “swapfile”
+du -sh /var/swapfile
 
 # make swap
 mkswap /var/swapfile
@@ -13,5 +15,8 @@ mkswap /var/swapfile
 swapon /var/swapfile
 
 
-echo "add to startup
+echo "add to startup"
 echo "/var/swapfile swap swap defaults 0 0" >> /etc/fstab
+
+echo "check the results"
+free -m
