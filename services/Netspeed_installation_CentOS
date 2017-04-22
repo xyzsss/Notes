@@ -1,0 +1,17 @@
+#! env : bash
+
+wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -Uvh epel-release-latest-7.noarch.rpm
+yum install libnet libpcap libnet-devel libpcap-devel
+
+
+wget https://github.com/snooda/net-speeder/archive/master.zip
+unzip master.zip
+cd net-speeder-master
+# hostnamectl status
+# check as kvm res
+sh build.sh
+# if venetX，OpenVZ
+# sh build.sh -DCOOKED
+
+nohup ./net_speeder eth0 "ip" >/dev/null 2&1
