@@ -1,7 +1,7 @@
 # env: bash
 # 2017-04-21 23:54:46
 
-# [Need the part first] (https://raw.githubusercontent.com/xyzsss/Notes/realmaster/services/SSH_withkey_login)
+# Need the part first https://raw.githubusercontent.com/xyzsss/Notes/realmaster/services/SSH_withkey_login
 # ssh port reset
 # redirect defaut port 22 to 2345 by iptables
 
