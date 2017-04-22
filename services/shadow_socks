@@ -1,37 +1,39 @@
+#!/usr/bin/ksh
+# 2017-04-22 16:09:16
+# platform: centos6/7
 
-# for centos6/7
+# virulation type
+yum install virt-what -y
+virt-what
 
-yum install python-setuptools && easy_install pip
+# install sss
+yum -y update
+yum install python-setuptools virt-what -y
+easy_install pip
 pip install shadowsocks
 
+echo "please  enter .... ,y,y manully"
+wget o0o.re/rscentos&&sh rscentos
 
 
-cat /etc/shadowsocks.json
-{
-"server":"PUBLIC_IP_ADDRESS",
-"server_port":8889,
-"local_address": "127.0.0.1",
-"local_port":1080,
-"password":"PASSWORD_VALUE",
-"timeout":600,
-"method":"aes-256-cfb"
-}
+echo "Input sss client connect password:"
+read SSS_CLIENT_PASS
+# generate shaodow sockets config
+PUBLIC_IP_ADDRESS=`ifconfig |grep 'inet addr'|grep Bcast|awk -F ":" '{print $2}'|awk '{print $1}'`
+echo "{" > /etc/shadowsocks.json
+echo "\"server\":\"${PUBLIC_IP_ADDRESS}\"," >> /etc/shadowsocks.json
+echo "\"server_port\":8890," >> /etc/shadowsocks.json
+echo "\"local_address\": \"127.0.0.1\"," >> /etc/shadowsocks.json
+echo "\"local_port\":1081," >> /etc/shadowsocks.json
+echo "\"password\":\"${SSS_CLIENT_PASS}\"," >> /etc/shadowsocks.json
+echo "\"timeout\":600," >> /etc/shadowsocks.json
+echo "\"method\":\"rc4-md5\"" >> /etc/shadowsocks.json
+echo "}" >> /etc/shadowsocks.json
 
-cat etc/shadowsocks.json.rc4
-{
-"server":"PUBLIC_IP_ADDRESS",
-"server_port":8890,
-"local_address": "127.0.0.1",
-"local_port":1081,
-"password":"PASSWORD_VALUE",
-"timeout":600,
-"method":"rc4-md5"
-}
+echo "sss server configure file generated."
 
 
-ssserver -c /etc/shadowsocks.json -d start
-ssserver -c /etc/shadowsocks.json.rc4 -d start
-ssserver -c /etc/shadowsocks.json -d stop
-ssserver -c /etc/shadowsocks.json.rc4 -d stop
-echo "alias sstarts=\"ssserver -c /etc/shadowsocks.json -d start\"" >> .bashrc
-echo "alias sstops=\"ssserver -c /etc/shadowsocks.json -d stop\"" >> .bashrc
+echo "alias sstarts=\"ssserver -c /etc/shadowsocks.json -d start\"" >> ~/.bashrc
+echo "alias sstops=\"ssserver -c /etc/shadowsocks.json -d stop\"" >> ~/.bashrc
+source ~/.bashrc
+sstarts
