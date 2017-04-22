@@ -11,8 +11,8 @@ pip install virtualenv
 
 # install py3
 yum install gcc zlib-devel openssl-devel -y
-wget http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tar.bz2 -O /var/tmp/Python-3.3.2.tar.bz2
-bzip2 -cd /var/tmp/Python-3.3.2.tar.bz2 | tar xvf -
+wget http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tar.bz2
+bzip2 -d Python-3.3.2.tar.bz2 | tar xvf -
 cd Python-3.3.2
 ./configure
 make
