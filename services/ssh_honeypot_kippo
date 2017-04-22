@@ -8,7 +8,7 @@
 
 
 # twisted install
-yum install gcc bzip2 python-devel -y
+yum install gcc bzip2 python-devel python-pyasn1 -y
 wget https://pypi.python.org/packages/5f/14/41881d2f8a4afefed7ad80c9ecdc0501054f5f981fb43326b20057fb772c/Twisted-14.0.1.tar.bz2#md5=742a97879d63c341b398bc909bbdcdab 
 bzip2 -d Twisted-14.0.1.tar.bz2
 tar xvf Twisted-14.0.1.tar
