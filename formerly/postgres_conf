@@ -1,0 +1,37 @@
+
+
+##Enable remote user login
+
+
+#Enable client authentication
+$ su - postgres
+$ vi /etc/postgresql/8.2/main/pg_hba.conf
+	host all all 10.10.29.0/24 md5	#trust may login without pass
+	host all all 0.0.0.0/0 md5		#trust any ip
+
+#Enable networking for PostgreSQL,Allow TCP/IP socket
+$ vi /etc/postgresql/8.2/main/postgresql.conf
+	listen_addresses='*'
+	listen_addresses='202.54.1.2 202.54.1.3'
+
+#Restarting odoo server
+$ /etc/init.d/postgresql restart
+
+
+
+##Set pg account
+$ sudo -u postgres
+$ psql postgres
+# \password postgres
+
+
+##Test Login
+psql -h IP_ADDRESS -U USER_NAME -d DATABASE_NAME
+
+
+
+
+
+##refs
+http://michael.otacoo.com/postgresql-2/take-care-of-kernel-memory-limitation-for-postgresql-shared-buffers/
+https://www.thomas-krenn.com/en/wiki/Perl_warning_Setting_locale_failed_in_Debian

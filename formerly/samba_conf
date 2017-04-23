@@ -1,0 +1,34 @@
+#-----------------------------                
+#
+#    Author:  xyzsss
+#    Date:  2015-09-08 16:55:17
+#
+#-----------------------------
+
+##install
+$ sudo apt-get install samba-common cifs-utils samba
+
+##change configuration
+$ sudo vim /etc/samba/smb.conf
+	[share]
+      path = /home/user/samba_share		#This define path u wanna
+      available = yes 
+      browseable = yes 
+      public = yes 
+      writable = yes
+      valid users = odoo 		#'odoo' is username,'@odoo' is usergroup 
+
+##change permission
+$ sudo chmod 777 /home/user/samba_share		#Change the dir permission 
+
+
+##Add pass for new samba user 'msamba'
+$ sudo adduser msamba
+$ sudo smbpasswd -a msamba
+
+##restart services
+$ sudo service samba restart
+
+
+##Windows 
+\\IP

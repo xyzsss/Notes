@@ -1,0 +1,77 @@
+#!/bin/bash
+
+#**************************************
+#	exuxu50@gmail.com
+#**************************************
+
+==DEV ENV==
+Ruby  > 1.9.3 Or JRuby
+sqlite (default)-> MySQL/PostgreSQL
+Ruby on Rails -> （apache、nginx）
+
+ENCODE：UTF-8，NONE BOM(byte-order mark)
+
+
+===ENV ON Ubuntu 14.04 x64===
+sudo apt-get update
+sudo apt-get upgrade
+
+sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev
+wget https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
+tar xf ruby-2.2.2.tar.gz
+cd ruby-2.2.2/
+./configure
+make
+sudo make install
+ruby -v
+
+#gem source change for GFW
+gem sources -l
+gem sources --remove https://rubygems.org/
+gem sources -a https://ruby.taobao.org/
+
+#ruby bundle source change for GFW
+$ bundle config mirror.https://rubygems.org https://ruby.taobao.org/ 		
+
+sudo gem install rails --no-ri --no-rdoc
+
+#	RubyGems is Ruby library source manager  ,like pip to python.
+#	Below,is simple doc for gem usage.
+#get gem version
+gem -v 
+#update gem to leated new version 
+gem update --system 
+#install gem software
+gem install gem_name 
+#no RDoc and ri file,they are readme doc
+gem install gem_name --no-ri --no-rdoc
+add “gem: --no-ri --no-rdoc” to “~/.gemrc” file
+#list gem installed software
+gem list 
+#update gem software
+gem update gem_name 
+#update software installed by gem
+gem update 
+#install gem software for sepcial version
+gem install -v x.x.x gemname 
+#unistall gem software
+gem uninstall gem_name 
+
+
+
+==RAILS START==
+CRUD is for Create、Read、Update、Delete.
+
+
+$ mkdir projects
+$ cd projects
+$ rails new demo --skip-test-unit
+$ cd demo
+$ bundle install
+
+#you need rexec bundle every time modify Gemfile 
+#you need restart rails server for change "config" or "vender" every time,but not for production env
+$ cd projects/demo
+$ bin/rails server
+
+visti by http://localhost:3000

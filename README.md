@@ -1,2 +1,2 @@
-# Notes
-No more here
+# scripts
+init 

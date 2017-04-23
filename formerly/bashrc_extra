@@ -1,0 +1,22 @@
+## file: ~/.bashrc
+#add by xyz
+
+###odoo
+alias ostart='/home/xyz/Documents/odoo7/openerp-server -c  /home/xyz/Documents/odoo7/debian/openerp-server.conf '
+alias ostart8888='/home/xyz/Documents/odoo8/openerp-server -c  /home/xyz/Documents/odoo8/debian/openerp-server.conf  --xmlrpc-port 8888 '
+####py files auto redetect
+#alias ostart8888='/home/xyz/Documents/odoo8/openerp-server -c  /home/xyz/Documents/odoo8/debian/openerp-server.conf  --xmlrpc-port 8888 --auto-reload'
+alias viodooconf='vim /home/xyz/Documents/odoo8/debian/openerp-server.conf'
+
+#git
+alias gitpush='git push -u origin master'
+alias gitlog='git log --pretty=oneline' 
+
+#sys
+alias closeubuntu='sudo shutdown -h now'
+alias dstatsss='dstat --cpu --io --mem --net --load --fs --vm --disk-util --disk-tps --freespace --swap --top-io --top-bio-adv'
+
+#tool
+alias pythonhttp='python -m SimpleHTTPServer 8000'
+
+#test
